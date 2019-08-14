@@ -1,27 +1,78 @@
-# Angular5Project
+Web Components / Angular Elements
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 1.7.4.
+Useful things:
+	https://blog.nrwl.io/5-reasons-to-use-angular-elements-390c9a629f89
 
-## Development server
+Video: 'I won't go in details - you have a link on my website with a full description of everything'
+		'This video will show you what can be done'
+		'The final result will be this view'
+Flow: 
+	Create one Angular 5 application, one Angular 8 Application, and one React Application.
+	Inject them all in a static index.html file and / or inject them all into Angular 5 application.
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
 
-## Code scaffolding
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
 
-## Build
+Joining Files:
+`npm install --save-dev concat fs-extra`
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `-prod` flag for a production build.
 
-## Running unit tests
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+STEPS FOR BUILDING A WEB COMPONENT IN ANGULAR
+1) In app.module.ts convert bootstrap to entryComponents
+2)
+ ```export class AppModule {
+  constructor(private injector: Injector) {}
 
-## Running end-to-end tests
+  ngDoBootstrap() {
+    const el = createCustomElement(AppComponent, {injector: this.injector});
+    customElements.define('angular-eight-component', el);
+  }
+}
+```
+3) `npm install --save-dev concat fs-extra`
+4) In package Json:
+`"build:elements": "ng build --prod --output-hashing none && node elements-build.js"`,
+5) create elements-build.js in root folder and add this
 
-Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
+```const fs = require('fs-extra');
+const concat = require('concat');
 
-## Further help
+(async function build() {
+  const files = [
+    './dist/Angular8/runtime-es2015.js',
+    './dist/Angular8/polyfills-es2015.js',
+    './dist/Angular8/main-es2015.js'
+  ];
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
+  await fs.ensureDir('elements');
+  await concat(files, 'elements/Angular8.js');
+  await fs.copyFile(
+    './dist/Angular8/styles.css',
+    'elements/styles.css'
+  );
+})();
+```
+
+STEPS FOR INTEGRATING A WEBCOMPONENT IN ANGULAR
+1) Put the built files in assets of Angular 5 app
+2) add   schemas: `[CUSTOM_ELEMENTS_SCHEMA]` to AppModule
+3) Do `ng eject`
+4) Delete every reference of CommonsChunkPlugin
+
+
+
+ISSUE: Loading Webpack 4 in Webpack 2/3 App
+
+https://forum.vuejs.org/t/error-when-loading-vue-on-a-webpage-that-uses-webpack-3/48955
+
+https://stackoverflow.com/questions/39187556/angular-cli-where-is-webpack-config-js-file-new-angular6-does-not-support-ng-e
+
+I had to disable code splitting in vue.config.js and it worked fine
+
+https://github.com/webpack/webpack/issues/8247
+https://medium.com/@cliffers/how-to-run-multiple-webpack-instances-on-the-same-page-and-avoid-any-conflicts-4e2fe0f016d1
+
+
+Do ng eject to eject the webpack.config.js from angular-cli
+
