@@ -35,7 +35,8 @@ STEPS FOR BUILDING A WEB COMPONENT IN ANGULAR
 `"build:elements": "ng build --prod --output-hashing none && node elements-build.js"`,
 5) create elements-build.js in root folder and add this
 
-```const fs = require('fs-extra');
+```
+const fs = require('fs-extra');
 const concat = require('concat');
 
 (async function build() {
