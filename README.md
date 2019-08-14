@@ -40,8 +40,9 @@ const fs = require('fs-extra');
 const concat = require('concat');
 
 (async function build() {
+// INSTEAD OF /Angular8/ USE YOUR PROJECT NAME OR YOUR CUSTOM DIST LOCATION
   const files = [
-    './dist/Angular8/runtime-es2015.js',
+    './dist/Angular8/runtime-es2015.js', 
     './dist/Angular8/polyfills-es2015.js',
     './dist/Angular8/main-es2015.js'
   ];
